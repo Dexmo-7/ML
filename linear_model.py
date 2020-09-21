@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import sklearn.linear_model
+from sklearn import linear_model
 import os
 
 def prepare_country_stats(oecd_bli, gdp_per_capita):
@@ -29,8 +30,17 @@ country_stats = prepare_country_stats(oecd_bli, gdp_per_capita)
 X = np.c_[country_stats["GDP per capita"]]
 y = np.c_[country_stats["Life satisfaction"]]
 
+#More for data preparing
+lin1 = linear_model.LinearRegression()
+lin1.fit(X, y)
+t0, t1 = lin1.intercept_[0], lin1.coef_[0][0]
 #Data visualization
 country_stats.plot(kind='scatter', x="GDP per capita", y="Life satisfaction")
+plt.axis([0, 60000, 0, 10])
+X2 = np.linspace(0, 60000, 1000)
+plt.plot(X2, t0 + t1*X2, "b")
+plt.text(5000, 3.1, r"$\theta_0 = 4.85$", fontsize=14, color="b")
+plt.text(5000, 2.2, r"$\theta_1 = 4.91 \times 10^{-5}$", fontsize=14, color="b")
 plt.show()
 
 #Choosing the linear model
